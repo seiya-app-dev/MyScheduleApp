@@ -72,6 +72,7 @@
     <Compile Include="UserEditForm.Designer.cs">
       <DependentUpon>UserEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ValidateCase.cs" />
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>

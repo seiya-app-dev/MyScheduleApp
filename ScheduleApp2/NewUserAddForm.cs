@@ -49,35 +49,11 @@ namespace ScheduleApp2
 
             bool ExisitError = false;
 
-            if (string.IsNullOrEmpty(userName))
-            {
-                UserNameErrorLabel.Text = "ユーザー名を入力してください。";
-                ExisitError = true;
-            }
-            else
-            {
-                UserNameErrorLabel.Text = "";
-            }
+            bool isValid = ValidateCase.ValidateAll(userName, password, fullName, out string userNameError, out string passwordError, out string fullNameError);
 
-            if(string.IsNullOrEmpty(password))
-            {
-                PasswordErrorLabel.Text = "パスワードを入力してください。";     
-                ExisitError = true;
-            }
-            else
-            {
-                PasswordErrorLabel.Text = "";
-            }
-
-            if (string.IsNullOrEmpty(fullName))
-            {
-                FullNameErrorLabel.Text = "名前を入力してください。";
-                ExisitError = true;
-            }
-            else
-            {
-                FullNameErrorLabel.Text = "";
-            }
+            UserNameErrorLabel.Text = userNameError ?? "";
+            PasswordErrorLabel.Text = passwordError ?? "";
+            FullNameErrorLabel.Text = fullNameError ?? "";
 
             if (RoleComboBox.SelectedItem == null)
             {
