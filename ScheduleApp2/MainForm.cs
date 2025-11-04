@@ -98,7 +98,7 @@ namespace ScheduleApp2
                     targetUserId = _userId;                    
                 }               
                 
-                string sqlQuery = "SELECT [Date], [Schedule] FROM Schedules WHERE UserID = @UserID AND YEAR([Date]) = @year AND MONTH([Date]) = @month AND (IsDeleted = 0 OR IsDeleted IS NULL)";
+                string sqlQuery = "SELECT Date, Schedule FROM Schedules WHERE UserID = @UserID AND YEAR(Date) = @year AND MONTH(Date) = @month AND (IsDeleted = 0 OR IsDeleted IS NULL)";
                 using (SqlCommand loadCommand = new SqlCommand(sqlQuery, connection))
                 {
                     loadCommand.Parameters.AddWithValue("@UserID", targetUserId);
