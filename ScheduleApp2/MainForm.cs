@@ -598,7 +598,7 @@ namespace ScheduleApp2
             }
         }
 
-        private void LogListRoad()
+        private void LogListLoad()
         {
             LogListView.Items.Clear();
 
@@ -637,7 +637,7 @@ namespace ScheduleApp2
                     return;
                 }
 
-                LogListRoad();
+                LogListLoad();
             }
             
             
