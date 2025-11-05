@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace ScheduleApp2.Forms
+namespace ScheduleApp2
 {
     internal class ValidateCase
     {
