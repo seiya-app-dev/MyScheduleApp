@@ -1,8 +1,9 @@
-using Xunit;
 using Moq;
 using MyScheduleApp.Repositories;
-using AppUser = MyScheduleApp.Models.User;
 using MyScheduleApp.Services;
+using Xunit;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using AppUser = MyScheduleApp.Models.User;
 
 namespace MyScheduleApp.Tests
 {
@@ -41,6 +42,8 @@ namespace MyScheduleApp.Tests
 
             Assert.Throws<ArgumentException>(() =>
             service.GetUser(userName, "Test"));
+
+            mockRepo.Verify(r => r.GetUser(userName, "Test"), Times.Once);
         }
 
         [Theory]
@@ -54,6 +57,7 @@ namespace MyScheduleApp.Tests
 
             Assert.Throws<ArgumentException>(() =>
             service.GetUser("Test", password));
+            mockRepo.Verify(r => r.GetUser("Test", password), Times.Once);
         }
 
         [Theory]
@@ -67,6 +71,7 @@ namespace MyScheduleApp.Tests
 
             Assert.Throws<ArgumentException>(() =>
             service.GetUser(userName, "Test"));
+            mockRepo.Verify(r => r.GetUser(userName, "Test"), Times.Once);
         }
 
         [Fact]
@@ -80,6 +85,8 @@ namespace MyScheduleApp.Tests
             var service = new LoginService(mockRepo.Object);
 
             Assert.Throws<Exception>(() => service.GetUser("Test", "Test"));
+
+            mockRepo.Verify(r => r.GetUser("Test", "Test"), Times.Once());
         }
     }
 }

@@ -20,6 +20,11 @@ namespace MyScheduleApp.Services
 
         public List<Schedule> GetSchedules(int userId, int year, int month)
         {
+            if (year < 1)
+                throw new ArgumentException("invalid year");
+            if (month < 1 || month > 12)
+                throw new ArgumentException("invalid month");
+
             try
             {
                 return _repository.GetSchedules(userId, year, month);

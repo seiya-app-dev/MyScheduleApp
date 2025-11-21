@@ -29,6 +29,32 @@ namespace MyScheduleApp.Tests
         }
 
         [Fact]
+        public void GetSchedules_RepositoryThrows_ExceptionThrown()
+        {
+            var mockRepo = new Mock<IScheduleRepository>();
+            var service =new ScheduleService(mockRepo.Object);
+
+            mockRepo.Setup(r => r.GetSchedules(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Throws(new Exception("DB Error"));
+            Assert.Throws<Exception>(() => service.GetSchedules(1, 2024, 1));
+
+            mockRepo.Verify(r => r.GetSchedules(1, 2024, 1), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(0, 1)]
+        [InlineData(1, 0)]
+        public void GetShcheules_InvalidParameters_ThrowsArgumentException(int year, int month)
+        {
+            var mockRepo = new Mock<IScheduleRepository>();
+            var service = new ScheduleService(mockRepo.Object);
+
+            Assert.Throws<ArgumentException>(() => service.GetSchedules(1, year, month));
+
+            mockRepo.Verify(r => r.GetSchedules(1, year, month), Times.Once);
+        }
+
+        [Fact]
         public void AddSchedule_ValidSchedule_CallsRepositoryOnece()
         {
             var mockRepo = new Mock<IScheduleRepository>();
@@ -36,8 +62,22 @@ namespace MyScheduleApp.Tests
 
             service.AddSchedule(1, new DateTime(2024, 1, 1), "Test");
 
-            mockRepo.Verify(r => r.AddSchedule(1, new DateTime(2024, 1, 1), "Test"), Times.Once);
+            mockRepo.Verify(r => r.AddSchedule(1, new DateTime(2024, 1, 1), "Test"), Times.Never);
+        }
 
+        [Fact]
+
+        public void AddSchedule_RepositoryThrows_ExceptionThrown()
+        {
+            var mockRepo = new Mock<IScheduleRepository>();
+            var service = new ScheduleService(mockRepo.Object);
+            var date = new DateTime(2024, 1, 1);
+
+            mockRepo.Setup(r => r.AddSchedule(1, date,"Test"))
+                .Throws(new Exception("DB Error"));
+
+            Assert.Throws<Exception>( () => service.AddSchedule(1, date, "Test"));
+            mockRepo.Verify(r => r.AddSchedule(1, date, "Test"), Times.Once);
         }
 
         [Fact]
@@ -49,6 +89,21 @@ namespace MyScheduleApp.Tests
             service.DeleteSchedule(1, new DateTime(2024, 1, 1));
 
             mockRepo.Verify(r => r.DeleteSchedule(1, new DateTime(2024, 1, 1)), Times.Once);
+        }
+
+        [Fact]
+        public void DeleteSchedule_RepositoryThrows_ExceptionThrown()
+        {
+            var mockRepo = new Mock<IScheduleRepository>();
+            var service = new ScheduleService(mockRepo.Object);
+            var date = new DateTime(2024, 1, 1);
+
+            mockRepo.Setup(r => r.DeleteSchedule(1, date))
+                .Throws(new Exception("DB Error"));
+
+            Assert.Throws<Exception>(() => service.DeleteSchedule(1, date));
+            mockRepo.Verify(r => r.DeleteSchedule(1, date), Times.Once);
+
         }
 
         [Fact]
