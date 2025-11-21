@@ -43,7 +43,7 @@ namespace MyScheduleApp.Tests
             Assert.Throws<ArgumentException>(() =>
             service.GetUser(userName, "Test"));
 
-            mockRepo.Verify(r => r.GetUser(userName, "Test"), Times.Once);
+            mockRepo.Verify(r => r.GetUser(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         [Theory]
@@ -57,7 +57,7 @@ namespace MyScheduleApp.Tests
 
             Assert.Throws<ArgumentException>(() =>
             service.GetUser("Test", password));
-            mockRepo.Verify(r => r.GetUser("Test", password), Times.Once);
+            mockRepo.Verify(r => r.GetUser("Test", password), Times.Never);
         }
 
         [Theory]
@@ -71,7 +71,7 @@ namespace MyScheduleApp.Tests
 
             Assert.Throws<ArgumentException>(() =>
             service.GetUser(userName, "Test"));
-            mockRepo.Verify(r => r.GetUser(userName, "Test"), Times.Once);
+            mockRepo.Verify(r => r.GetUser(userName, "Test"), Times.Never);
         }
 
         [Fact]

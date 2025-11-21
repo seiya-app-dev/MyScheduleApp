@@ -25,7 +25,11 @@ namespace MyScheduleApp.Tests
             var result = service.GetSchedules(1, 2024, 1);
 
             Assert.NotNull(result);
-            Assert.Equal(expected, result);
+            Assert.Equal(expected.Count, result.Count);
+            Assert.Equal(expected[0].ScheduleId, result[0].ScheduleId);
+            Assert.Equal(expected[0].UserId, result[0].UserId);
+            Assert.Equal(expected[0].Date, result[0].Date);
+            Assert.Equal(expected[0].Details, result[0].Details);
         }
 
         [Fact]
@@ -51,7 +55,7 @@ namespace MyScheduleApp.Tests
 
             Assert.Throws<ArgumentException>(() => service.GetSchedules(1, year, month));
 
-            mockRepo.Verify(r => r.GetSchedules(1, year, month), Times.Once);
+            mockRepo.Verify(r => r.GetSchedules(1, year, month), Times.Never);
         }
 
         [Fact]
@@ -62,7 +66,7 @@ namespace MyScheduleApp.Tests
 
             service.AddSchedule(1, new DateTime(2024, 1, 1), "Test");
 
-            mockRepo.Verify(r => r.AddSchedule(1, new DateTime(2024, 1, 1), "Test"), Times.Never);
+            mockRepo.Verify(r => r.AddSchedule(1, new DateTime(2024, 1, 1), "Test"), Times.Once);
         }
 
         [Fact]
@@ -81,7 +85,7 @@ namespace MyScheduleApp.Tests
         }
 
         [Fact]
-        public void DeleteSchedule_ValidScedule_CallRepositoryOnce()
+        public void DeleteSchedule_ValidSchedule_CallRepositoryOnce()
         {
             var mockRepo = new Mock<IScheduleRepository>();
             var service = new ScheduleService(mockRepo.Object);
@@ -115,6 +119,20 @@ namespace MyScheduleApp.Tests
             service.RestoreSchedule(1, new DateTime(2024,1, 1));
 
             mockRepo.Verify(r => r.RestoreSchedule(1, new DateTime(2024, 1, 1)), Times.Once);
+        }
+
+        [Fact]
+        public void RestoreSchedule_RepositoryThrows_ExceptionThrown()
+        {
+            var mockRepo = new Mock<IScheduleRepository>();
+            var service = new ScheduleService(mockRepo.Object);
+            var date = new DateTime(2024, 1, 1);
+
+            mockRepo.Setup(r => r.RestoreSchedule(1, date))
+                .Throws(new Exception("DB Error"));
+
+            Assert.Throws<Exception>(() => service.RestoreSchedule(1, date));
+            mockRepo.Verify(r => r.RestoreSchedule(1, date), Times.Once);
         }
     }
 }

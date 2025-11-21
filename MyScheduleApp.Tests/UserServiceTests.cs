@@ -33,6 +33,19 @@ namespace MyScheduleApp.Tests
         }
 
         [Fact]
+        public void GetUser_RepositoryThrows_ExceptionThrown()
+        {
+            var mockRepo = new Mock<IUserRepository>();
+            var service = new UserService(mockRepo.Object);
+
+            mockRepo.Setup(r => r.GetUserList())
+                .Throws(new Exception("DB Error"));
+
+            Assert.Throws<Exception>(() => service.GetUsers());
+            mockRepo.Verify(r => r.GetUserList(), Times.Once);
+        }
+
+        [Fact]
         public void AddUser_ValidUser_ReturnsTrue()
         {
             var mockRepo = new Mock<IUserRepository>();
@@ -49,6 +62,26 @@ namespace MyScheduleApp.Tests
                 .Returns(1);
             var result = service.AddUser(user);
             Assert.True(result);
+            mockRepo.Verify(r => r.AddUser(user), Times.Once);
+        }
+
+        [Fact]
+        public void AddUser_RepositoryThrows_ExceptionThrown()
+        {
+            var mockRepo = new Mock<IUserRepository>();
+            var service = new UserService(mockRepo.Object);
+
+            var user = new User
+            {
+                UserId = 1,
+                FullName = "Test",
+                PasswordHash = "Test"
+            };
+
+            mockRepo.Setup(r => r.AddUser(user))
+                .Throws(new Exception("DB Error"));
+
+            Assert.Throws<Exception>(() => service.GetUsers());
             mockRepo.Verify(r => r.AddUser(user), Times.Once);
         }
 
@@ -79,6 +112,23 @@ namespace MyScheduleApp.Tests
         }
 
         [Fact]
+        public void GetUserById_RepositoryThrows_ExceptionThrown()
+        {
+            var mockRepo = new Mock<IUserRepository>();
+            var service = new UserService(mockRepo.Object);
+
+            int userId = 1;
+
+            mockRepo.Setup(r => r.GetUserById(userId))
+                .Throws(new Exception("DB Error"));
+
+            Assert.Throws<Exception>(() => service.GetUserById(userId));
+
+            mockRepo.Verify(r => r.GetUserById(userId), Times.Once);
+        }
+
+
+        [Fact]
         public void UpdateUser_ValidUser_ReturnsTrue()
         {
             var mockRepo = new Mock<IUserRepository>();
@@ -97,6 +147,26 @@ namespace MyScheduleApp.Tests
             var result = service.UpdateUser(user);
             Assert.True(result);
             mockRepo.Verify(r => r.UpdateUser(user), Times.Once);
+        }
+
+        [Fact]
+        public void UpdateUser_RepositoryThrows_ExceptionThrown()
+        {
+            var mockRepo = new Mock<IUserRepository>();
+            var service = new UserService(mockRepo.Object);
+
+            var user = new User
+            {
+                UserId = 1,
+                FullName = "Test",
+                PasswordHash = "Test"
+            };
+
+            mockRepo.Setup(r => r.UpdateUser(user))
+                .Throws(new Exception("DB Error"));
+
+            Assert.Throws<Exception>(() => service.UpdateUser(user));
+            mockRepo.Verify((r => r.UpdateUser(user)), Times.Once);
         }
     }
 }
